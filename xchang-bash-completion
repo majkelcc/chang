@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function __xchang() {
+  local cmd_dir
+  local comp_word
+  local cword
+  local -a completions
+
+  local chang_dir=~/projects/chang/sources
+
+  cword=${COMP_WORDS[COMP_CWORD]}
+
+  COMPREPLY=()
+  if [[ $COMP_CWORD -eq 1 ]]; then
+    completions=($(find ${chang_dir} -iname '*.sh' -type f))
+    completions=(${completions[*]#$chang_dir/chang_})
+    completions=(${completions[*]%%.sh})
+    for comp_word in "${completions[@]}"; do
+      if [[ $comp_word =~ ^$cword ]]; then
+        COMPREPLY=("${COMPREPLY[@]}" $comp_word)
+      fi
+    done
+  fi
+}
+
+complete -F __xchang xchang

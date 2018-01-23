@@ -1,0 +1,40 @@
+export CHANG_SET=${CHANG_SET:--eu}
+set ${CHANG_SET}
+
+sources=$(dirname $BASH_SOURCE)
+
+for source in $sources/*.sh; do
+  f=$source
+  f=${f##*/}
+  f=${f%%.sh}
+
+  if ! type $f 2>/dev/null | grep -q function; then
+    source $source
+  fi
+  export -f $f
+done
+
+export CHANG_VERSION=1
+export CHANG_DEBUG=${CHANG_DEBUG:-false}
+export CHANG_REV_PROXY_ENABLED=${CHANG_REV_PROXY_ENABLED:-true}
+export CHANG_SYNC_ENABLED=${CHANG_SYNC_ENABLED:-true}
+export CHANG_UID=${CHANG_UID:-1000}
+export CHANG_GID=${CHANG_GID:-1000}
+export CHANG_MIN_IMAGE=${CHANG_MIN_IMAGE:-alpine:latest}
+export CHANG_EXTRA_PORTS_START=${CHANG_EXTRA_PORTS_START:-8080}
+
+export CHANG_HOME=${HOME}/.chang
+export CHANG_PWD=$(pwd -P)
+export CHANG_TMP_PATH=$CHANG_PWD/.chang/tmp
+
+export CHANG_APP_NAME=${CHANG_APP_NAME:-${CHANG_PWD##*/}}
+export CHANG_APP_HASH=${CHANG_APP_HASH:-$(chang_app_hash $CHANG_PWD)}
+export CHANG_APP_ID=${CHANG_APP_ID:-$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)}
+
+export CHANG_SYNC_VOLUME=${CHANG_APP_ID/chang_/chang-sync_}
+export CHANG_NETWORK=$CHANG_APP_ID
+export COMPOSE_PROJECT_NAME=$CHANG_APP_ID
+
+source .chang/environment
+chang-rev-proxy
+mkdir -p $CHANG_TMP_PATH

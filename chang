@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export CHANG_ROOT=$(dirname $(readlink $BASH_SOURCE))
+source $CHANG_ROOT/sources/chang
+
+(
+  source $CHANG_TMP_PATH/environment
+  while read l; do
+    eval echo "$l"
+  done < $CHANG_TMP_PATH/volumes | while read volume; do chang_create_volume $volume; done
+)
+
+chang_run_command "$@"

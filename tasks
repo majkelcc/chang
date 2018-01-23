@@ -1,0 +1,8 @@
+Chang-rev-proxy:
+
+1. Function that will add a new project to chang proxy. This needs to be persistent between proxy restarts. On env change, proxy should reset all project's settings.
+2. Create a watch strategy for projects. It should allow two ways of monitoring files for changes:
+a) run on every change - chang should hold current file state (commit) and run the command each time that state changes
+b) run once per version - chang should run command only once for specific file version. Switching between two versions of the file should not trigger the command if it was already run once for each of the versions.
+3. Build command in chang-compose.yml file. Consider passing some build variables automatically, like CHANG_UID, CHANG_GUID
+4. Detect env changes. Determine if checksums are better vs commit (maybe a hybrid?).
