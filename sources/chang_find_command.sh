@@ -12,6 +12,6 @@ chang_find_command() {
   elif [[ -f $command_dir/${command_dir##*/} ]]; then
     echo "$command_dir/${command_dir##*/}" "${@:-}"
   else
-    chang_error "Command not found in $command_dir"
+    chang_error "Command not found in $command_dir/${@:-}"
   fi
 }

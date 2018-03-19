@@ -1,4 +1,6 @@
 chang_rev_proxy_join_network() {
   local network=$1
-  docker network connect $network $CHANG_REV_PROXY_CONTAINER &>dev/null || true
+  if ! chang_rev_proxy_networks | grep -qw $network; then
+    docker network connect $network $CHANG_REV_PROXY_CONTAINER
+  fi
 }

@@ -11,7 +11,7 @@ import pipes
 CHANG_TMP_PATH = os.environ["CHANG_TMP_PATH"]
 CHANG_APP_ID = os.environ["CHANG_APP_ID"]
 CHANG_APP_NAME = os.environ["CHANG_APP_NAME"]
-CHANG_NETWORK = "chang_{0}".format(CHANG_APP_NAME)
+CHANG_NETWORK = os.environ["CHANG_NETWORK"]
 CHANG_SET = os.environ["CHANG_SET"]
 
 if len(sys.argv) != 2:
@@ -28,10 +28,10 @@ class VolumesMapper:
     return self.map[volume]
 
 def chang_service_network_alias(name):
-  return subprocess.check_output(["/bin/bash", "%sc" % CHANG_SET, 'chang_service_network_alias "{0}"'.format(name)])
+  return subprocess.check_output(["/usr/local/bin/bash", "%sc" % CHANG_SET, 'chang_service_network_alias "{0}"'.format(name)])
 
 def chang_external_volume_name(name):
-  return subprocess.check_output(["/bin/bash", "%sc" % CHANG_SET, "chang_external_volume_name '%s'" % name])
+  return subprocess.check_output(["/usr/local/bin/bash", "%sc" % CHANG_SET, "chang_external_volume_name '%s'" % name])
 
 VOLUMES_MAPPER = VolumesMapper()
 
@@ -95,7 +95,6 @@ for volume in VOLUMES_MAPPER.map:
   volumes_file.write(chang_external_volume_name(volume) + "\n")
 
 proxy_file = open("{0}/proxy".format(CHANG_TMP_PATH), "w")
-for watch in chang_compose.get("watch", []):
-  for w in watch:
-    proxy_file.write("%s " % pipes.quote(w))
-  proxy_file.write("\n")
+if chang_compose.get("server", {}).get("root", False):
+  service, port = chang_compose["server"]["root"].split(":")
+  proxy_file.write("$CHANG_NETWORK $CHANG_APP_NAME $CHANG_REV_PROXY_PORT %s %s\n" % (service, port))
