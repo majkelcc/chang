@@ -1,3 +1,3 @@
 chang_notice() {
-  printf "$(chang_color_notice)▷  ${@}$(chang_color_reset)\n"
+  printf "$(chang_color_notice)▷  ${@}$(chang_color_reset)\n" >&2
 }

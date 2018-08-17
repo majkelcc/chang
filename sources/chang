@@ -32,6 +32,7 @@ export CHANG_APP_HASH=${CHANG_APP_HASH:-$(chang_app_hash $CHANG_PWD)}
 export CHANG_APP_ID=${CHANG_APP_ID:-$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)}
 
 export CHANG_SYNC_VOLUME=${CHANG_APP_ID/chang_/chang-sync_}
+export CHANG_SYNC_ENABLED=true
 export CHANG_NETWORK=$CHANG_APP_ID
 export COMPOSE_PROJECT_NAME=$CHANG_APP_ID
 
@@ -45,3 +46,13 @@ export COMPOSE_PROJECT_NAME=$CHANG_APP_ID
 
 source .chang/environment
 mkdir -p $CHANG_TMP_PATH
+
+if [[ $CHANG_REV_PROXY_ENABLED == true ]]; then
+  if ! chang_rev_proxy_running; then
+    chang_rev_proxy_restart
+  fi
+fi
+
+if [[ $CHANG_SYNC_ENABLED == true ]]; then
+  chang_sync
+fi
