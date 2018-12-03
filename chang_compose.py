@@ -38,7 +38,7 @@ VOLUMES_MAPPER = VolumesMapper()
 def chang_error(message):
   os.system("bash -c 'chang_error {0}'".format(message))
   sys.exit(1)
-  
+
 chang_compose_file = sys.argv[1]
 chang_compose = yaml.load(file(chang_compose_file, 'r'))
 
@@ -98,3 +98,7 @@ proxy_file = open("{0}/proxy".format(CHANG_TMP_PATH), "w")
 if chang_compose.get("server", {}).get("root", False):
   service, port = chang_compose["server"]["root"].split(":")
   proxy_file.write("$CHANG_NETWORK $CHANG_APP_NAME $CHANG_REV_PROXY_PORT %s %s\n" % (service, port))
+if chang_compose.get("server", {}).get("subdomains", False):
+  for subdomain in chang_compose["server"]["subdomains"]:
+    service, port = chang_compose["server"]["subdomains"][subdomain].split(":")
+    proxy_file.write("$CHANG_NETWORK %s.$CHANG_APP_NAME $CHANG_REV_PROXY_PORT %s %s\n" % (subdomain, service, port))

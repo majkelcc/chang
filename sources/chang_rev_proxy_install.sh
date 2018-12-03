@@ -26,6 +26,35 @@ server {
     return 502 "#502 Bad gateway: it looks like ${host} app is not running";
   }
 }
+
+server {
+  set \$target $target_host:$target_port;
+  keepalive_timeout 0;
+
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  ssl_prefer_server_ciphers on;
+  ssl_dhparam /dhparam.pem;
+  ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA';
+  ssl_session_timeout 1d;
+  ssl_session_cache shared:SSL:50m;
+
+  ssl_certificate /nginx-selfsigned.crt;
+  ssl_certificate_key /nginx-selfsigned.key;
+
+  server_name .$host.localhost;
+  listen 443 ssl http2;
+  client_max_body_size 1G;
+
+  location / {
+    proxy_pass_request_headers on;
+    error_page 502 @offline;
+    proxy_pass http://\$target;
+  }
+
+  location @offline {
+    return 502 "#502 Bad gateway: it looks like ${host} app is not running";
+  }
+}
 CONF
 
   docker exec -i $CHANG_REV_PROXY_CONTAINER sh -c "cat - >> /var/www/chang.html && cd /var/www && sort -u chang.html > chang.html.tmp; mv chang.html.tmp chang.html" <<CONF
@@ -43,6 +72,4 @@ CONF
     }
   }
 CONF
-
-  chang_rev_proxy_reload
 }

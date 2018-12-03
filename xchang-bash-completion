@@ -6,7 +6,7 @@ function __xchang() {
   local cword
   local -a completions
 
-  local chang_dir=~/projects/chang/sources
+  local chang_dir=~/app/chang/sources
 
   cword=${COMP_WORDS[COMP_CWORD]}
 
