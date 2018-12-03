@@ -24,6 +24,7 @@ chang_compose_init() {
       while read l; do
         eval echo "$l"
       done < $CHANG_TMP_PATH/proxy | while read proxy_app; do chang_rev_proxy_install $proxy_app; done
+      chang_rev_proxy_reload
     )
 
     export _CHANG_COMPOSE_INIT=true
