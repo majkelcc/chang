@@ -1,0 +1,30 @@
+autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+
+function __chang() {
+  local cmd_dir
+  local comp_word
+  local cword
+  local -a completions
+
+  cword=${COMP_WORDS[COMP_CWORD]}
+  for comp_word in "${COMP_WORDS[@]:1:$(( COMP_CWORD > 0 ? COMP_CWORD - 1 : 0 ))}"; do
+    cmd_dir=${cmd_dir:+$cmd_dir/}${comp_word}
+  done
+
+  cmd_dir=${PWD}/.chang/bin${cmd_dir:+/$cmd_dir}
+
+  COMPREPLY=()
+  if [[ -d $cmd_dir ]]; then
+    completions=($(find ${cmd_dir} -type f -or -type l))
+    completions=(${completions[*]#$cmd_dir/})
+    completions=(${completions[*]%%/*})
+    for comp_word in "${completions[@]}"; do
+      if [[ $comp_word =~ ^$cword && $cword != ${cmd_dir##*/} ]]; then
+        COMPREPLY=("${COMPREPLY[@]}" $comp_word)
+      fi
+    done
+  fi
+}
+
+complete -F __chang chang

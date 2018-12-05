@@ -1,6 +1,0 @@
-#!/bin/bash
-
-export CHANG_ROOT=$(dirname $(readlink $BASH_SOURCE))
-source $CHANG_ROOT/sources/chang
-
-chang "$@"

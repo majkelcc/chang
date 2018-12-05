@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -eu
+
+REPOSITORY_URL=git@github.com:majkelcc/chang.git
+DEFAULT_CHANG_HOME=${CHANG_HOME:-~/.chang}
+
+echo -n "Install chang to (defaults to ${DEFAULT_CHANG_HOME/$HOME/~}): "
+read chang_home
+
+eval chang_home="${chang_home%/}" # use eval to expand ~ if present
+chang_home="${chang_home:-${DEFAULT_CHANG_HOME}}"
+
+if [[ -d "$chang_home" ]]; then
+  echo "Directory ${chang_home} exists, skipping"
+else
+  mkdir -p "$chang_home"
+  git clone $REPOSITORY_URL "$chang_home"
+fi
+
+if [[ -z ${CHANG_HOME:-} ]]; then
+  bashrc=
+  if [[ -f ~/.bash_profile ]]; then
+    bashrc=~/.bash_profile
+  elif [[ -f ~/.bashrc ]]; then
+    bashrc=~/.bashrc
+  fi
+
+  if [[ -n $bashrc ]]; then
+    echo -n "Install chang in ${bashrc/$HOME/~}? (Y/n): "
+    read y
+    if [[ -z $y || $y == "y" ]]; then
+      echo
+      echo "Installing chang in ${bashrc/$HOME/~}"
+      cat <<EOF | tee -a "$bashrc"
+
+export CHANG_HOME=${chang_home/$HOME/~}
+export PATH="\$CHANG_HOME/bin:$PATH"
+source \$CHANG_HOME/chang-bash-completion
+
+EOF
+    fi
+  fi
+
+  zshrc=
+  if [[ -f ~/.zshrc ]]; then
+    zshrc=~/.zshrc
+  fi
+
+  if [[ -n $zshrc ]]; then
+    echo -n "Install chang in ${zshrc/$HOME/~}? (Y/n): "
+    read y
+    if [[ -z $y || $y == "y" ]]; then
+      echo
+      echo "Installing chang in ${zshrc/$HOME/~}"
+      cat <<EOF | tee -a "$zshrc"
+
+export CHANG_HOME=${chang_home/$HOME/~}
+export PATH="\$CHANG_HOME/bin:$PATH"
+source \$CHANG_HOME/chang-zsh-completion
+
+EOF
+    fi
+  fi
+fi
+
+echo
+echo "Chang installed 🐳"
+echo "(open a new shell to use it)"

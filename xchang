@@ -1,7 +1,0 @@
-#!/bin/bash
-
-CHANG_ROOT=$(dirname $(readlink $BASH_SOURCE))
-sources=$CHANG_ROOT/sources
-source $sources/chang
-
-xchang "$@"
