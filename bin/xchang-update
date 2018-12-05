@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -eu
+
+if [[ ${BASH_SOURCE#$CHANG_HOME} != ${BASH_SOURCE} ]]; then
+  tmp=$(mktemp)
+  cp $BASH_SOURCE $tmp
+  chmod u+x $tmp
+  exec $tmp
+fi
+
+destroy_evidence() {
+  rm $BASH_SOURCE
+}
+
+trap destroy_evidence EXIT
+
+cd $CHANG_HOME
+echo "Updating chang..."
+
+git fetch
+git add .
+git stash save update
+
+if git rebase; then
+  git stash list | head -n 1 | grep -q 'update$' && git stash pop
+else
+  git stash list | head -n 1 | grep -q 'update$' && git stash pop
+
+  echo "Automatic merge failed, aborting." >&2
+  echo "Merge master branch manually" >&2
+  exit 1
+fi
+
+git log --oneline -n 1
