@@ -1,5 +1,7 @@
 chang_compose_init() {
   if [[ -z ${_CHANG_COMPOSE_INIT:-} ]]; then
+    export _CHANG_COMPOSE_INIT=true
+
     if $CHANG_SYNC_ENABLED; then
       chang-sync >/dev/null
     fi
@@ -10,6 +12,5 @@ chang_compose_init() {
       fi
       chang_update_commit .chang
     fi
-    export _CHANG_COMPOSE_INIT=true
   fi
 }
