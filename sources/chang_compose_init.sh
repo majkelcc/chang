@@ -6,10 +6,8 @@ chang_compose_init() {
       chang-sync >/dev/null
     fi
     if ! chang_compare_commit .chang; then
-      if ! chang_compare_commit .chang/chang_compose.yml; then
-        chang_reload
-        chang_start
-      fi
+      chang_reload
+      chang_start
       chang_update_commit .chang
     fi
   fi
