@@ -1,5 +1,6 @@
 chang_start() {
   chang_create_network $CHANG_NETWORK
+  chang_compose_init
 
   (
     source $CHANG_TMP_PATH/environment
