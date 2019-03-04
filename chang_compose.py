@@ -30,10 +30,10 @@ class VolumesMapper:
     return self.map[volume]
 
 def chang_service_network_alias(name):
-  return subprocess.check_output(["/usr/local/bin/bash", "%sc" % CHANG_SET, 'chang_service_network_alias "{0}"'.format(name)])
+  return subprocess.check_output(["/bin/bash", "%sc" % CHANG_SET, 'chang_service_network_alias "{0}"'.format(name)])
 
 def chang_external_volume_name(name):
-  return subprocess.check_output(["/usr/local/bin/bash", "%sc" % CHANG_SET, "chang_external_volume_name '%s'" % name])
+  return subprocess.check_output(["/bin/bash", "%sc" % CHANG_SET, "chang_external_volume_name '%s'" % name])
 
 VOLUMES_MAPPER = VolumesMapper()
 
