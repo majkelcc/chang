@@ -35,7 +35,7 @@ if [[ -z ${CHANG_HOME:-} ]]; then
       cat <<EOF | tee -a "$bashrc"
 
 export CHANG_HOME=${chang_home/$HOME/~}
-export PATH="\$CHANG_HOME/bin:$PATH"
+export PATH="\$CHANG_HOME/bin:\$PATH"
 source \$CHANG_HOME/chang-bash-completion
 
 EOF
@@ -56,7 +56,7 @@ EOF
       cat <<EOF | tee -a "$zshrc"
 
 export CHANG_HOME=${chang_home/$HOME/~}
-export PATH="\$CHANG_HOME/bin:$PATH"
+export PATH="\$CHANG_HOME/bin:\$PATH"
 source \$CHANG_HOME/chang-zsh-completion
 
 EOF
