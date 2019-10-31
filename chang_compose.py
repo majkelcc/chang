@@ -44,6 +44,8 @@ def chang_error(message):
 chang_compose_file = sys.argv[1]
 chang_compose = yaml.load(file(chang_compose_file, 'r'))
 
+os.system("mkdir -p {0}".format(CHANG_TMP_PATH))
+
 env_file = open("{0}/environment".format(CHANG_TMP_PATH), "w")
 for line in chang_compose["environment"]:
   env_file.write("export {0}\n".format(line))

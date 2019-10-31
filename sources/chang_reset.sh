@@ -7,7 +7,6 @@ chang_reset() {
   chang_notice "Resetting chang"
   chang_notice "Current chang revision: $(chang_revision)"
   chang_notice "Clearing current project's state"
-  rm -rf $CHANG_STATE_PATH
   chang_notice "Removing all containers"
   chang_compose down --volumes --remove-orphans --timeout 3
   chang_notice "Removing all volumes"
@@ -18,6 +17,9 @@ chang_reset() {
       eval echo "$l"
     done < $CHANG_TMP_PATH/volumes | while read volume; do docker volume rm -f $volume; done
   )
+
+  rm -rf $CHANG_STATE_PATH
+  rm -rf $CHANG_TMP_PATH
 
   chang_notice "Reset complete"
   chang_notice "Run \`chang start\` to start the app"

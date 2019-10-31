@@ -43,4 +43,3 @@ export CHANG_REV_PROXY_IMAGE=${CHANG_REV_PROXY_IMAGE:-majkel/chang-rev-proxy:ssl
 export CHANG_REV_PROXY_EXTRA_PORTS_PREFIX=${CHANG_REV_PROXY_EXTRA_PORTS_PREFIX:-808}
 
 source .chang/environment
-mkdir -p $CHANG_TMP_PATH
