@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -f .chang/bin/rails/rails ]; then
+  exec chang rails "$@"
+else
+  PATH="${PATH//$CHANG_HOME\/bin:/}"
+  exec rails "$@"
+fi

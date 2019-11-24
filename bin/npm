@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -f .chang/bin/npm/npm ]; then
+  exec chang npm "$@"
+else
+  PATH="${PATH//$CHANG_HOME\/bin:/}"
+  exec npm "$@"
+fi
