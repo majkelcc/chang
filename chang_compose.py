@@ -42,7 +42,7 @@ def chang_error(message):
   sys.exit(1)
 
 chang_compose_file = sys.argv[1]
-chang_compose = yaml.load(file(chang_compose_file, 'r'), Loader=FullLoader)
+chang_compose = yaml.load(file(chang_compose_file, 'r'), Loader=yaml.FullLoader)
 
 os.system("mkdir -p {0}".format(CHANG_TMP_PATH))
 
