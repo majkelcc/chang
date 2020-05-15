@@ -23,11 +23,12 @@ export CHANG_MIN_IMAGE=${CHANG_MIN_IMAGE:-alpine:latest}
 export CHANG_EXTRA_PORTS_START=${CHANG_EXTRA_PORTS_START:-8080}
 
 export CHANG_PWD=$(pwd -P)
+export CHANG_BRANCH=${CHANG_BRANCH:-}
 export CHANG_TMP_PATH=$CHANG_PWD/.chang/tmp
 export CHANG_STATE_PATH=$CHANG_TMP_PATH/state
 
 export CHANG_APP_NAME=${CHANG_APP_NAME:-${CHANG_PWD##*/}}
-export CHANG_APP_HASH=${CHANG_APP_HASH:-$(chang_app_hash $CHANG_PWD)}
+export CHANG_APP_HASH=${CHANG_APP_HASH:-$(chang_app_hash $CHANG_PWD $CHANG_BRANCH)}
 export CHANG_APP_ID=${CHANG_APP_ID:-$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)}
 
 export CHANG_SYNC_VOLUME=${CHANG_APP_ID/chang_/chang-sync_}
