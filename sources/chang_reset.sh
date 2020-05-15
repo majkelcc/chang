@@ -1,5 +1,5 @@
 chang_reset() {
-  $CHANG_SYNC_ENABLED && chang-sync stop
+  [[ $CHANG_SYNC_ENABLED == true ]] && chang-sync stop
 
   export CHANG_REV_PROXY_ENABLED=false
   export CHANG_SYNC_ENABLED=false

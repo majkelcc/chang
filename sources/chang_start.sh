@@ -9,7 +9,7 @@ chang_start() {
     done < $CHANG_TMP_PATH/volumes | while read volume; do chang_create_volume $volume; done
   )
 
-  if $CHANG_REV_PROXY_ENABLED; then
+  if [[ $CHANG_REV_PROXY_ENABLED == true ]]; then
     chang_rev_proxy_start
     chang_rev_proxy_reset
     (
