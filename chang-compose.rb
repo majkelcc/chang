@@ -29,6 +29,7 @@ CHANG_SYNC_ENABLED = env("CHANG_SYNC_ENABLED") == "true"
 CHANG_NETWORK = env("CHANG_NETWORK")
 CHANG_TMP_PATH = env("CHANG_TMP_PATH")
 CHANG_ENVIRONMENT = chang_compose.delete("environment") || []
+DOCKER_COMPOSE_FILE = env("DOCKER_COMPOSE_FILE")
 
 VOLUMES = Set.new
 SERVICES = Hash.new
@@ -109,6 +110,6 @@ chang_compose.delete("environment")
 chang_compose.delete("server")
 chang_compose.delete("watch")
 
-File.open(File.join(CHANG_TMP_PATH, "docker-compose.yml"), "w") do |docker_compose_file|
+File.open(DOCKER_COMPOSE_FILE, "w") do |docker_compose_file|
   docker_compose_file.write(chang_compose.to_yaml)
 end

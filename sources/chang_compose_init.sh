@@ -6,16 +6,21 @@ chang_compose_init() {
       chang-sync >/dev/null
     fi
 
-    local branch_marker_file=$CHANG_TMP_PATH/current_branch
+    mkdir -p $CHANG_TMP_PATH
+    touch $CHANG_TMP_PATH/environment
+    local branch_marker_file=$CHANG_TMP_PATH/last_used_branch
     touch $branch_marker_file
 
     local current_branch=$(chang_current_branch)
     local last_used_branch=$(cat $branch_marker_file)
     if ! chang_compare_commit .chang || [[ $current_branch != $last_used_branch ]]; then
       (
-        export COMPOSE_PROJECT_NAME=$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)${last_used_branch:+_$(chang_app_hash $last_used_branch)}
-        chang_compose down -t 0
+        if [[ -f $DOCKER_COMPOSE_FILE ]]; then
+          export COMPOSE_PROJECT_NAME=$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)${last_used_branch:+_$(chang_app_hash $last_used_branch)}
+          chang_compose down -t 0
+        fi
       )
+
       chang_reload
       chang_init
 
