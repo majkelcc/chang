@@ -5,9 +5,10 @@ chang_compose_init() {
     if [[ $CHANG_SYNC_ENABLED == true ]]; then
       chang-sync >/dev/null
     fi
+
     if ! chang_compare_commit .chang; then
       chang_reload
-      chang_start
+      chang_init
       chang_update_commit .chang
     fi
   fi
