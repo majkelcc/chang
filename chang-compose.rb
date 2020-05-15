@@ -53,7 +53,7 @@ chang_compose.fetch("services").each do |name, service|
         VOLUMES.add("chang")
         "#{volume.sub(/:nocopy$/, "")}:nocopy"
       else
-        "../../:#{$1}"
+        "../../:#{$1.sub(/:nocopy$/, "")}"
       end
     when Hash
       chang_error "Hash syntax in services volumes is not supported: #{volume.inspect}"
