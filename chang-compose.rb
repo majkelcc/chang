@@ -51,7 +51,7 @@ chang_compose.fetch("services").each do |name, service|
     when /^chang:(.*)/
       if CHANG_SYNC_ENABLED
         VOLUMES.add("chang")
-        "#{volume}:nocopy"
+        "#{volume.sub(/:nocopy$/, "")}:nocopy"
       else
         "../../:#{$1}"
       end
