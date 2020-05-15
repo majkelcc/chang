@@ -57,9 +57,10 @@ chang_compose.fetch("services").each do |name, service|
       end
     when Hash
       chang_error "Hash syntax in services volumes is not supported: #{volume.inspect}"
-    when /([^:]+):([^:]+)/
-      VOLUMES.add(expand_env_variables $1)
-      expand_env_variables volume
+    when /([^:]+):(.+)/
+      expanded_name = expand_env_variables $1
+      VOLUMES.add(expanded_name)
+      "#{expanded_name}:#{$2}"
     else
       chang_error "Unrecognized service volume syntax: #{volume.inspect}"
     end
