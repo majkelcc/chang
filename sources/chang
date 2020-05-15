@@ -15,6 +15,7 @@ for source in $sources/*.sh; do
   export -f $f
 done
 
+export CHANG_LEVEL=${CHANG_LEVEL:--1}
 export CHANG_REV_PROXY_ENABLED=${CHANG_REV_PROXY_ENABLED:-true}
 export CHANG_SYNC_ENABLED=${CHANG_SYNC_ENABLED:-true}
 export CHANG_UID=${CHANG_UID:-1000}

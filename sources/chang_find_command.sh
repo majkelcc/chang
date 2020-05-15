@@ -1,6 +1,6 @@
 chang_find_command() {
-  command_dir=".chang/bin"
-
+  local command_dir=".chang/bin"
+  local arg=("$@")
   local level=0
 
   while [[ ! -z ${1:-} ]]; do
@@ -16,6 +16,6 @@ chang_find_command() {
   elif [[ -f $command_dir/${command_dir##*/} ]]; then
     echo "$command_dir/${command_dir##*/}" $level
   else
-    chang_error "Command not found! We looked all over the place in $command_dir/${@:-}"
+    chang_error "Command \`chang ${arg[@]:0:((level + 1))}\` not found! We looked all over the place in $command_dir/${1}"
   fi
 }
