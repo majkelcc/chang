@@ -11,7 +11,7 @@ chang_compose_init() {
 
     local current_branch=$(chang_current_branch)
     local last_used_branch=$(cat $branch_marker_file)
-    if [[ ! chang_compare_commit .chang || $current_branch != $last_used_branch ]]; then
+    if ! chang_compare_commit .chang || [[ $current_branch != $last_used_branch ]]; then
       (
         export COMPOSE_PROJECT_NAME=$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)${last_used_branch:+_$(chang_app_hash $last_used_branch)}
         chang_compose down -t 0
