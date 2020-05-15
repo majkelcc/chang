@@ -15,7 +15,7 @@ for source in $sources/*.sh; do
   export -f $f
 done
 
-export CHANG_LEVEL=${CHANG_LEVEL:--1}
+export CHANG_LEVEL=${CHANG_LEVEL:-0}
 export CHANG_SYNC_ENABLED=${CHANG_SYNC_ENABLED:-true}
 export CHANG_UID=${CHANG_UID:-1000}
 export CHANG_GID=${CHANG_GID:-1000}
@@ -26,7 +26,7 @@ export CHANG_PWD=$(pwd -P)
 export CHANG_TMP_PATH=$CHANG_PWD/.chang/tmp
 export CHANG_STATE_PATH=$CHANG_TMP_PATH/state
 
-export CHANG_BRANCH=${CHANG_BRANCH:-}
+export CHANG_BRANCH=${CHANG_BRANCH:-$(chang_current_branch)}
 export CHANG_BRANCH_HASH=${CHANG_BRANCH_HASH:-$(chang_app_hash $CHANG_BRANCH)}
 export CHANG_APP_NAME=${CHANG_APP_NAME:-${CHANG_PWD##*/}}
 export CHANG_APP_HASH=${CHANG_APP_HASH:-$(chang_app_hash $CHANG_PWD)}
@@ -46,3 +46,4 @@ export CHANG_REV_PROXY_IMAGE=${CHANG_REV_PROXY_IMAGE:-majkel/chang-rev-proxy:ssl
 export CHANG_REV_PROXY_EXTRA_PORTS_PREFIX=${CHANG_REV_PROXY_EXTRA_PORTS_PREFIX:-808}
 
 source .chang/environment
+chang_compose_init

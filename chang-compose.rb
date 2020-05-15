@@ -23,7 +23,7 @@ end
 
 chang_compose_file = ARGV[0]
 chang_compose = YAML.load(File.read chang_compose_file)
-chang_compose["version"] ||= '2'
+chang_compose["version"] ||= '2.4'
 
 CHANG_SYNC_ENABLED = env("CHANG_SYNC_ENABLED") == "true"
 CHANG_NETWORK = env("CHANG_NETWORK")
