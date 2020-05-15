@@ -46,7 +46,7 @@ def expand_env_variables(str)
 end
 
 chang_compose.fetch("services").each do |name, service|
-  service.fetch("volumes", []).map do |volume|
+  service.fetch("volumes", []).map! do |volume|
     case volume
     when /^chang:(.*)/
       if CHANG_SYNC_ENABLED
@@ -67,7 +67,7 @@ chang_compose.fetch("services").each do |name, service|
   service["networks"] ||= {}
   service["networks"].merge! "chang" => { "aliases" => [chang_service_network_alias(name)] }
   service["environment"] ||= []
-  service["environment"] += CHANG_ENVIRONMENT
+  service["environment"] = CHANG_ENVIRONMENT + service["environment"]
 end
 
 chang_compose["volumes"] ||= {}
