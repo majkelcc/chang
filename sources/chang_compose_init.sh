@@ -16,7 +16,6 @@ chang_compose_init() {
         export COMPOSE_PROJECT_NAME=$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)${last_used_branch:+_$(chang_app_hash $last_used_branch)}
         chang_compose down -t 0
       )
-
       chang_reload
       chang_init
 

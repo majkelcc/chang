@@ -33,8 +33,6 @@ CHANG_ENVIRONMENT = chang_compose.delete("environment") || []
 VOLUMES = Set.new
 SERVICES = Hash.new
 
-system("mkdir -p #{CHANG_TMP_PATH}")
-
 File.open(File.join(CHANG_TMP_PATH, "environment"), "w") do |env_file|
   CHANG_ENVIRONMENT.each do |line|
     env_file.puts("export #{line}")
