@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if [ -f .chang/bin/bundle/bundle ]; then
-  exec chang bundle "$@"
-else
-  PATH="${PATH//$CHANG_HOME\/bin:/}"
-  exec bundle "$@"
-fi

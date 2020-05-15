@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if [ -f .chang/bin/yarn/yarn ]; then
-  exec chang yarn "$@"
-else
-  PATH="${PATH//$CHANG_HOME\/bin:/}"
-  exec yarn "$@"
-fi
