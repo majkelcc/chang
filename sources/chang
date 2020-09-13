@@ -15,6 +15,7 @@ for source in $sources/*.sh; do
   export -f $f
 done
 
+export __CHANG_PID=${__CHANG_PID:-$$}
 export CHANG_LEVEL=${CHANG_LEVEL:-0}
 export CHANG_SYNC_ENABLED=${CHANG_SYNC_ENABLED:-true}
 export CHANG_UID=${CHANG_UID:-1000}
@@ -34,7 +35,7 @@ export CHANG_APP_ID=${CHANG_APP_ID:-$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HA
 export CHANG_ENV_ID=${CHANG_ENV_ID:-$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)${CHANG_BRANCH:+_$CHANG_BRANCH_HASH}}
 
 export CHANG_SYNC_VOLUME=${CHANG_APP_ID/chang_/chang-sync_}
-export CHANG_NETWORK=$CHANG_ENV_ID
+export CHANG_NETWORK=$CHANG_APP_ID
 export DOCKER_COMPOSE_PROJECT_NAME=$CHANG_ENV_ID
 export DOCKER_COMPOSE_FILE=$CHANG_TMP_PATH/docker-compose.yml
 
@@ -46,5 +47,6 @@ export CHANG_REV_PROXY_CONTAINER=${CHANG_REV_PROXY_CONTAINER:-changrevproxy}
 export CHANG_REV_PROXY_IMAGE=${CHANG_REV_PROXY_IMAGE:-majkel/chang-rev-proxy:ssl}
 export CHANG_REV_PROXY_EXTRA_PORTS_PREFIX=${CHANG_REV_PROXY_EXTRA_PORTS_PREFIX:-808}
 
+mkdir -p $CHANG_TMP_PATH
 source .chang/environment
-chang_compose_init
+trap chang_memo_clear EXIT

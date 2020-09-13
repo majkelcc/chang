@@ -16,6 +16,6 @@ chang_find_command() {
   elif [[ -f $command_dir/${command_dir##*/} ]]; then
     echo "$command_dir/${command_dir##*/}" $level
   else
-    chang_error "Command \`chang ${arg[@]:0:((level + 1))}\` not found! We looked all over the place in $command_dir/${1}"
+    chang_error "Command \`chang ${arg[@]:0:((level + 1))}\` not found! We looked all over the place in $command_dir/${1:-${command_dir##*/}}"
   fi
 }

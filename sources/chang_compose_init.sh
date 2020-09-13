@@ -1,30 +1,25 @@
 chang_compose_init() {
-  if [[ -z ${_CHANG_COMPOSE_INIT:-} ]]; then
-    export _CHANG_COMPOSE_INIT=true
-
+  if chang_memo CHANG_COMPOSE_INIT; then
     if [[ $CHANG_SYNC_ENABLED == true ]]; then
       chang-sync >/dev/null
     fi
 
-    mkdir -p $CHANG_TMP_PATH
-    touch $CHANG_TMP_PATH/environment
-    local branch_marker_file=$CHANG_TMP_PATH/last_used_branch
-    touch $branch_marker_file
-
-    local last_used_branch=$(cat $branch_marker_file)
-    if ! chang_compare_commit .chang || [[ $CHANG_BRANCH != $last_used_branch ]]; then
-      (
-        if [[ -f $DOCKER_COMPOSE_FILE ]]; then
-          export COMPOSE_PROJECT_NAME=$(chang_app_id $CHANG_APP_NAME $CHANG_APP_HASH)${last_used_branch:+_$(chang_app_hash $last_used_branch)}
-          chang_compose down -t 0
-        fi
-      )
-
+    if ! chang_compare_commit .chang; then
       chang_reload
       chang_init
-
-      printf "$CHANG_BRANCH" > $branch_marker_file
       chang_update_commit .chang
+    fi
+
+    last_branch_file=$CHANG_TMP_PATH/last_branch
+    touch $last_branch_file
+    last_branch=$(cat $last_branch_file)
+    if [[ $CHANG_BRANCH != $last_branch ]]; then
+      local running_containers=$(docker ps | grep -oE ${CHANG_APP_ID}_'[^[:space:]]*' | grep -v $CHANG_BRANCH_HASH)
+      if [[ ! -z $running_containers ]]; then
+        chang_notice "Switching to ${CHANG_BRANCH} branch"
+        docker kill $running_containers
+      fi
+      printf "$CHANG_BRANCH" > $last_branch_file
     fi
   fi
 }

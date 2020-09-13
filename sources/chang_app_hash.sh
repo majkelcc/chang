@@ -1,3 +1,3 @@
 chang_app_hash() {
-  echo "$@" | shasum - | head -c 8
+  echo "$@" | shasum - | head -c 6
 }
