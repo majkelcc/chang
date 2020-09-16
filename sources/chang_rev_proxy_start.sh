@@ -1,5 +1,6 @@
 chang_rev_proxy_start() {
   if ! chang_rev_proxy_running; then
+    chang_notice "Starting chang-rev-proxy"
     chang_rev_proxy_remove
     docker run -d \
       --name ${CHANG_REV_PROXY_CONTAINER} \
