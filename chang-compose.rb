@@ -65,7 +65,14 @@ chang_compose.fetch("services").each do |name, service|
     end
   end
   service["networks"] ||= {}
-  service["networks"].merge! "chang" => { "aliases" => [chang_service_network_alias(name)] }
+  service["networks"].merge! \
+    "chang" => {
+      "aliases" => \
+        service["networks"]
+         .fetch("chang", {})
+         .fetch("aliases", [])
+         .push(chang_service_network_alias(name))
+    }
   service["environment"] ||= []
   service["environment"] = (service.key?("extends") ? [] : CHANG_ENVIRONMENT) + service["environment"]
 end
