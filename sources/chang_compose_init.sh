@@ -23,8 +23,6 @@ chang_compose_init() {
       chang_reload
     fi
 
-    if [[ $CHANG_REV_PROXY_ENABLED == true ]]; then
-      chang_init
-    fi
+    chang_init
   fi
 }
