@@ -81,17 +81,15 @@ chang_compose["volumes"] ||= {}
 chang_compose["volumes"]
 VOLUMES.-(chang_compose["volumes"].keys).each do |volume|
   chang_compose["volumes"][volume] = {
-    "external" => {
-      "name" => chang_external_volume_name(volume)
-    }
+    "name" => chang_external_volume_name(volume),
+    "external" => true
   }
 end
 
 chang_compose["networks"] ||= {}
 chang_compose["networks"]["chang"] = {
-  "external" => {
-    "name" => CHANG_NETWORK
-  }
+  "name" => CHANG_NETWORK,
+  "external" => true
 }
 
 File.open(File.join(CHANG_TMP_PATH, "volumes"), "w") do |volumes_file|
@@ -111,11 +109,16 @@ File.open(File.join(CHANG_TMP_PATH, "proxy"), "w") do |proxy_file|
       proxy_file.puts("$CHANG_NETWORK #{name}.$CHANG_APP_NAME $CHANG_REV_PROXY_PORT #{service} #{port}")
     end
   end
+  if subdomains = chang_compose.fetch("server", {})["ports"]
+    subdomains.each do |port, target|
+      service, port = target.split(":")
+      proxy_file.puts("$CHANG_NETWORK $CHANG_APP_NAME #{port} #{service} #{port}")
+    end
+  end
 end
 
 chang_compose.delete("environment")
 chang_compose.delete("server")
-chang_compose.delete("watch")
 
 File.open(DOCKER_COMPOSE_FILE, "w") do |docker_compose_file|
   docker_compose_file.write(chang_compose.to_yaml)

@@ -1,5 +1,6 @@
 chang_reset() {
   [[ $CHANG_SYNC_ENABLED == true ]] && chang-sync stop
+  [[ $CHANG_REV_PROXY_ENABLED == true ]] && docker kill $CHANG_REV_PROXY_CONTAINER || true
 
   export CHANG_REV_PROXY_ENABLED=false
   export CHANG_SYNC_ENABLED=false

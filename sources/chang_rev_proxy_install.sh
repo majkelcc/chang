@@ -5,6 +5,9 @@ chang_rev_proxy_install() {
   local target_host=$(chang_service_network_alias $4)
   local target_port=$5
 
+  local https_port=443
+  [[ $port != $CHANG_REV_PROXY_PORT ]] && https_port=$port
+
   chang_rev_proxy_join_network $network
 
   docker exec -i $CHANG_REV_PROXY_CONTAINER sh -c "cat - > /nginx.d/chang/${host}_${port}.conf" <<CONF
@@ -12,24 +15,9 @@ server {
   set \$target $target_host:$target_port;
   keepalive_timeout 0;
 
-  server_name .$host.localhost;
-  listen $port;
-  client_max_body_size 1G;
-
-  location / {
-    proxy_pass_request_headers on;
-    error_page 502 @offline;
-    proxy_pass http://\$target;
-  }
-
-  location @offline {
-    return 502 "#502 Bad gateway: it looks like ${host} app is not running";
-  }
-}
-
-server {
-  set \$target $target_host:$target_port;
-  keepalive_timeout 0;
+  proxy_busy_buffers_size 512k;
+  proxy_buffers 4 512k;
+  proxy_buffer_size 256k;
 
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_prefer_server_ciphers on;
@@ -42,7 +30,28 @@ server {
   ssl_certificate_key /nginx-selfsigned.key;
 
   server_name .$host.localhost;
-  listen 443 ssl http2;
+  listen $https_port ssl http2;
+  client_max_body_size 1G;
+
+  location / {
+    proxy_pass_request_headers on;
+    error_page 502 @offline;
+    proxy_pass http://\$target;
+  }
+
+  location @offline {
+    return 502 "#502 Bad gateway: it looks like ${host} app is not running";
+  }
+}
+CONF
+
+  [[ $port == $CHANG_REV_PROXY_PORT ]] && docker exec -i $CHANG_REV_PROXY_CONTAINER sh -c "cat - >> /nginx.d/chang/${host}_${port}.conf" <<CONF
+server {
+  set \$target $target_host:$target_port;
+  keepalive_timeout 0;
+
+  server_name .$host.localhost;
+  listen $port;
   client_max_body_size 1G;
 
   location / {

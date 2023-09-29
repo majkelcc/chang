@@ -16,6 +16,7 @@ for source in $sources/*.sh; do
 done
 
 export __CHANG_PID=${__CHANG_PID:-$$}
+export CHANG_COMMAND=${CHANG_COMMAND:-chang $@}
 export CHANG_LEVEL=${CHANG_LEVEL:-0}
 export CHANG_SYNC_ENABLED=${CHANG_SYNC_ENABLED:-true}
 export CHANG_UID=${CHANG_UID:-1000}
