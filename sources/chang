@@ -23,6 +23,7 @@ export CHANG_UID=${CHANG_UID:-1000}
 export CHANG_GID=${CHANG_GID:-1000}
 export CHANG_MIN_IMAGE=${CHANG_MIN_IMAGE:-alpine:latest}
 export CHANG_EXTRA_PORTS_START=${CHANG_EXTRA_PORTS_START:-8080}
+export CHANG_SHASUM=${CHANG_SHASUM:-shasum}
 
 export CHANG_PWD=$(pwd -P)
 export CHANG_TMP_PATH=$CHANG_PWD/.chang/tmp
