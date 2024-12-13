@@ -13,6 +13,7 @@ function __chang() {
   done
 
   cmd_dir=${PWD}/.chang/bin${cmd_dir:+/$cmd_dir}
+  dirname=${cmd_dir##*/}
 
   COMPREPLY=()
   if [[ -d $cmd_dir ]]; then
@@ -20,8 +21,12 @@ function __chang() {
     completions=(${completions[*]#$cmd_dir/})
     completions=(${completions[*]%%/*})
     for comp_word in "${completions[@]}"; do
-      if [[ $comp_word =~ ^$cword && $cword != ${cmd_dir##*/} ]]; then
-        COMPREPLY=("${COMPREPLY[@]}" $comp_word)
+      if [[
+        $comp_word =~ ^$cword &&
+        $comp_word != $dirname &&
+        $cword != ${cmd_dir##*/}
+      ]]; then
+        COMPREPLY+=($comp_word)
       fi
     done
   fi
