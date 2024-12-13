@@ -1,6 +1,6 @@
 chang_run_command() {
   if [[ $# -eq 0 ]]; then
-    chang_compose ps
+    [[ -f ${CHANG_PWD}/.chang/bin/ps ]] && chang ps || chang_compose ps
     return $?
   fi
 
