@@ -47,6 +47,10 @@ EOF
     zshrc=~/.zshrc
   fi
 
+  if [[ -f ~/.zprofile ]]; then
+    zshrc=~/.zprofile
+  fi
+
   if [[ -n $zshrc ]]; then
     echo -n "Install chang in ${zshrc/$HOME/~}? (Y/n): "
     read y
