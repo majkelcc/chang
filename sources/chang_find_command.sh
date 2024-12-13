@@ -1,5 +1,5 @@
 chang_find_command() {
-  local command_dir=".chang/bin"
+  local command_dir="${CHANG_PWD}/.chang/bin"
   local arg=("$@")
   local level=0
 
